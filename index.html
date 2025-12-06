@@ -21,11 +21,12 @@
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Quicksand', sans-serif; /* Font hiện đại, tròn trịa dễ thương */
             min-height: 100vh;
+            /* Gradient màu đêm giáng sinh sang trọng */
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
             color: #fff;
-            overflow: hidden;
+            overflow: hidden; /* Ngăn thanh cuộn */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -68,7 +69,7 @@
         /* --- HEADER --- */
         .header-icon {
             font-size: 60px;
-            color: #fcd34d;
+            color: #fcd34d; /* Màu vàng Gold */
             margin-bottom: 20px;
             filter: drop-shadow(0 0 15px rgba(252, 211, 77, 0.5));
             animation: float 3s ease-in-out infinite;
@@ -117,7 +118,7 @@
             justify-content: center;
             gap: 20px;
             position: relative;
-            height: 60px;
+            height: 60px; /* Giữ khoảng trống để nút không bị nhảy layout */
         }
 
         button {
@@ -136,7 +137,7 @@
             background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
             color: #0f172a;
             box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
-            z-index: 20;
+            z-index: 20; /* Luôn nằm trên */
         }
 
         .btn-yes:active {
@@ -147,37 +148,8 @@
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            /* Transition mượt mà khi chạy */
             transition: all 0.3s ease; 
-        }
-
-        /* --- MUSIC CONTROL --- */
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-
-        .music-control:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-
-        .music-control.playing i {
-            animation: spin 3s linear infinite;
         }
 
         /* --- MODAL SUCCESS --- */
@@ -248,40 +220,25 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="https://ia800403.us.archive.org/21/items/jingle-bells-kevin-macleod/Jingle%20Bells%20%28Kevin%20MacLeod%29.mp3" type="audio/mpeg">
-        Trình duyệt của cậu không hỗ trợ phát nhạc rồi :(
-    </audio>
-
     <canvas id="snowCanvas"></canvas>
-
-    <div class="music-control" id="musicBtn">
-        <i class="fas fa-music"></i>
-    </div>
 
     <div class="container">
         <div class="glass-box">
             <div class="header-icon">
-                <i class="fas fa-tree"></i>
-            </div>
+                <i class="fas fa-tree"></i> </div>
             
-            <h1>Merry Christmas, Thảo!</h1>
+            <h1>Merry Christmas, Chocomint!</h1>
 
             <div class="message-box">
                 <span class="typewriter-text" id="text"></span><span class="cursor">|</span>
             </div>
 
             <div class="question">
-                Tối Noel này (24/12),<br>đi chơi với tớ nhé? 🎄
+                Tối Noel này (24/12),<br>đi chơi với tớ nhé?(bận thì nhắn tớ nhaaa) 🎄
             </div>
 
             <div class="btn-group">
@@ -303,38 +260,12 @@
     </div>
 
     <script>
-        /* --- CẤU HÌNH --- */
+        /* --- CẤU HÌNH NỘI DUNG (SỬA Ở ĐÂY) --- */
         const config = {
-            message: "Giáng sinh năm nay tớ muốn điều gì đó đặc biệt hơn mọi năm... \nĐó là được đi dạo phố và đón Noel cùng cậu. \nCậu đồng ý chứ? ✨",
+            // Lời chúc chạy chữ (dùng \n để xuống dòng)
+            message: "Giáng sinh năm nay tớ muốn điều gì đó đặc biệt hơn mọi năm... \nĐó là được đi dạo phố và đón Noel cùng cậu. \nCậu đồng ý chứ????? ",
+            music: false // Đặt true nếu muốn thử bật nhạc (lưu ý trình duyệt có thể chặn)
         };
-
-        /* --- XỬ LÝ NHẠC NỀN --- */
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
-        let isMusicPlaying = false;
-
-        function toggleMusic() {
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                musicBtn.classList.remove('playing');
-                musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-            } else {
-                bgMusic.play().then(() => {
-                    musicBtn.classList.add('playing');
-                    musicBtn.innerHTML = '<i class="fas fa-compact-disc"></i>';
-                }).catch(e => console.log("Chưa thể phát nhạc tự động"));
-            }
-            isMusicPlaying = !isMusicPlaying;
-        }
-
-        musicBtn.addEventListener('click', toggleMusic);
-
-        // Tự động thử phát nhạc khi người dùng tương tác lần đầu tiên (chạm vào màn hình)
-        document.body.addEventListener('click', function() {
-            if (!isMusicPlaying) {
-                toggleMusic();
-            }
-        }, { once: true }); // Chỉ chạy 1 lần
 
         /* --- LOGIC HIỆU ỨNG GÕ CHỮ --- */
         const textElement = document.getElementById('text');
@@ -342,39 +273,49 @@
         
         function typeWriter() {
             if (index < config.message.length) {
+                // Xử lý xuống dòng
                 if (config.message.charAt(index) === '\n') {
                     textElement.innerHTML += '<br>';
                 } else {
                     textElement.innerHTML += config.message.charAt(index);
                 }
                 index++;
-                setTimeout(typeWriter, 50);
+                setTimeout(typeWriter, 50); // Tốc độ gõ (càng nhỏ càng nhanh)
             }
         }
+        // Chạy sau 1 giây
         setTimeout(typeWriter, 1000);
 
-        /* --- LOGIC NÚT "KHÔNG" --- */
+        /* --- LOGIC NÚT "KHÔNG" BỎ CHẠY (NÂNG CẤP) --- */
         const btnNo = document.getElementById('btnNo');
         const btnYes = document.getElementById('btnYes');
         
+        // Hàm tính toán vị trí ngẫu nhiên an toàn
         function moveButton() {
+            // Lấy kích thước màn hình
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
+            
+            // Kích thước nút
             const btnWidth = btnNo.offsetWidth;
             const btnHeight = btnNo.offsetHeight;
 
-            // Di chuyển ngẫu nhiên
+            // Tính vị trí ngẫu nhiên (trừ đi kích thước nút để không bị tràn ra ngoài)
             const randomX = Math.random() * (windowWidth - btnWidth - 40) + 20; 
             const randomY = Math.random() * (windowHeight - btnHeight - 40) + 20;
 
+            // Chuyển sang fixed để chạy khắp màn hình
             btnNo.style.position = 'fixed';
             btnNo.style.left = randomX + 'px';
             btnNo.style.top = randomY + 'px';
         }
 
+        // Bắt sự kiện trên máy tính (hover)
         btnNo.addEventListener('mouseenter', moveButton);
+
+        // Bắt sự kiện trên điện thoại (chạm vào là chạy)
         btnNo.addEventListener('touchstart', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Ngăn chặn click thật
             moveButton();
         });
 
@@ -382,7 +323,7 @@
         const modal = document.getElementById('successModal');
         
         btnYes.addEventListener('click', () => {
-            // Hiệu ứng pháo hoa
+            // 1. Bắn pháo hoa
             const duration = 3000;
             const end = Date.now() + duration;
 
@@ -407,33 +348,40 @@
                 }
             }());
 
+            // 2. Hiện Modal
             setTimeout(() => {
                 modal.classList.add('active');
             }, 500);
         });
 
+        // Đóng modal khi click ra ngoài
         modal.addEventListener('click', (e) => {
             if(e.target === modal) modal.classList.remove('active');
         });
 
-        /* --- TUYẾT RƠI --- */
+        /* --- HIỆU ỨNG TUYẾT RƠI (CANVAS) --- */
         const canvas = document.getElementById("snowCanvas");
         const ctx = canvas.getContext("2d");
+        
         let width = window.innerWidth;
         let height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
+
         const particles = [];
+        const particleCount = 100; // Số lượng tuyết
 
         class Particle {
-            constructor() { this.reset(); }
+            constructor() {
+                this.reset();
+            }
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * -height;
-                this.vy = 1 + Math.random() * 2;
-                this.vx = 0.5 - Math.random();
-                this.r = 1 + Math.random() * 2;
-                this.o = 0.5 + Math.random() * 0.5;
+                this.vy = 1 + Math.random() * 2; // Tốc độ rơi
+                this.vx = 0.5 - Math.random(); // Gió thổi nhẹ
+                this.r = 1 + Math.random() * 2; // Kích thước
+                this.o = 0.5 + Math.random() * 0.5; // Độ mờ
             }
             update() {
                 this.y += this.vy;
@@ -448,13 +396,22 @@
             }
         }
 
-        for (let i = 0; i < 100; i++) particles.push(new Particle());
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => { p.update(); p.draw(); });
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
             requestAnimationFrame(animate);
         }
+        
         animate();
+
+        // Resize canvas khi đổi kích thước màn hình
         window.addEventListener('resize', () => {
             width = window.innerWidth;
             height = window.innerHeight;
