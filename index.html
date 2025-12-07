@@ -3,58 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gửi Cậu ❤️</title>
+    <title>Gửi Chocomint ❤️</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* --- RESET & BASE STYLES --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        /* --- GIỮ NGUYÊN CSS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: 'Quicksand', sans-serif; /* Font hiện đại, tròn trịa dễ thương */
+            font-family: 'Quicksand', sans-serif;
             min-height: 100vh;
-            /* Gradient màu đêm giáng sinh sang trọng */
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
             color: #fff;
-            overflow: hidden; /* Ngăn thanh cuộn */
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
         }
-
-        /* --- BACKGROUND SNOW --- */
-        #snowCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* --- MAIN CONTAINER --- */
-        .container {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 500px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* --- GLASS CARD EFFECT --- */
+        #snowCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .container { position: relative; z-index: 10; width: 90%; max-width: 500px; padding: 20px; text-align: center; }
         .glass-box {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(16px);
@@ -65,16 +35,13 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             animation: fadeIn 1.5s ease-out;
         }
-
-        /* --- HEADER --- */
         .header-icon {
             font-size: 60px;
-            color: #fcd34d; /* Màu vàng Gold */
+            color: #fcd34d;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 15px rgba(252, 211, 77, 0.5));
             animation: float 3s ease-in-out infinite;
         }
-
         h1 {
             font-family: 'Dancing Script', cursive;
             font-size: 3rem;
@@ -84,43 +51,11 @@
             -webkit-text-fill-color: transparent;
             line-height: 1.2;
         }
-
-        /* --- TYPEWRITER CONTENT --- */
-        .message-box {
-            min-height: 100px;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .typewriter-text {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #e2e8f0;
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 2px;
-            background-color: #fcd34d;
-            animation: blink 1s infinite;
-        }
-
-        /* --- BUTTONS --- */
-        .question {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: #fff;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            position: relative;
-            height: 60px; /* Giữ khoảng trống để nút không bị nhảy layout */
-        }
-
+        .message-box { min-height: 140px; margin-bottom: 30px; text-align: left; } /* Tăng chiều cao để chứa đủ tâm thư */
+        .typewriter-text { font-size: 1.05rem; line-height: 1.6; color: #e2e8f0; }
+        .cursor { display: inline-block; width: 2px; background-color: #fcd34d; animation: blink 1s infinite; }
+        .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; color: #fff; }
+        .btn-group { display: flex; justify-content: center; gap: 20px; position: relative; height: 60px; }
         button {
             padding: 12px 30px;
             font-family: 'Quicksand', sans-serif;
@@ -132,94 +67,38 @@
             outline: none;
             border: none;
         }
-
         .btn-yes {
             background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
             color: #0f172a;
             box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
-            z-index: 20; /* Luôn nằm trên */
+            z-index: 20;
         }
-
-        .btn-yes:active {
-            transform: scale(0.95);
-        }
-
+        .btn-yes:active { transform: scale(0.95); }
         .btn-no {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            /* Transition mượt mà khi chạy */
             transition: all 0.3s ease; 
         }
-
-        /* --- MODAL SUCCESS --- */
         .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
         }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
+        .modal.active { opacity: 1; pointer-events: auto; }
         .modal-content {
-            background: #fff;
-            color: #333;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 85%;
-            transform: scale(0.5);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #fff; color: #333; padding: 40px; border-radius: 20px;
+            text-align: center; max-width: 85%;
+            transform: scale(0.5); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .modal.active .modal-content { transform: scale(1); }
+        .modal-icon { font-size: 50px; color: #ef4444; margin-bottom: 15px; animation: heartBeat 1.2s infinite; }
 
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-icon {
-            font-size: 50px;
-            color: #ef4444;
-            margin-bottom: 15px;
-            animation: heartBeat 1.2s infinite;
-        }
-
-        /* --- ANIMATIONS --- */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.3); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.3); }
-            70% { transform: scale(1); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes heartBeat { 0% { transform: scale(1); } 14% { transform: scale(1.3); } 28% { transform: scale(1); } 42% { transform: scale(1.3); } 70% { transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -229,42 +108,43 @@
     <div class="container">
         <div class="glass-box">
             <div class="header-icon">
-                <i class="fas fa-tree"></i> </div>
+                <i class="fas fa-gifts"></i> </div>
             
-            <h1>Merry Christmas, Chocomint!</h1>
+            <h1>Về món quà lúc nãy...</h1>
 
             <div class="message-box">
                 <span class="typewriter-text" id="text"></span><span class="cursor">|</span>
             </div>
 
             <div class="question">
-                Tối Noel này (24/12),<br>đi chơi với tớ nhé?(bận thì nhắn tớ nhaaa) 🎄
+                Quà thì nhận rồi...<br>
+                Giờ đi chơi Noel với tớ luôn nhé? 🎄
             </div>
 
             <div class="btn-group">
-                <button class="btn-yes" id="btnYes">Đi luôn! ❤️</button>
-                <button class="btn-no" id="btnNo">Không đi...</button>
+                <button class="btn-yes" id="btnYes">Oki đi luôn! ❤️</button>
+                <button class="btn-no" id="btnNo">Thôi ngại lắm...</button>
             </div>
         </div>
     </div>
 
     <div class="modal" id="successModal">
         <div class="modal-content">
-            <div class="modal-icon"><i class="fas fa-heart"></i></div>
-            <h2 style="font-family: 'Dancing Script'; font-size: 2rem; margin-bottom: 10px;">Yeahhh! Tuyệt vời!</h2>
+            <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
+            <h2 style="font-family: 'Dancing Script'; font-size: 2rem; margin-bottom: 10px;">Chốt đơn!</h2>
             <p style="font-size: 1.1rem; line-height: 1.5;">
-                Tớ sẽ qua đón cậu lúc <strong> tối</strong> nhé.<br>
-                Mặc ấm nhé, hôm nay trời lạnh đấy! ❄️
+                Cảm ơn cậu vì đã không chê hộp quà xấu xí của tớ haha.<br>
+                Giờ thì đi thôi nào! Merry Christmas! ❄️❤️
             </p>
         </div>
     </div>
 
     <script>
-        /* --- CẤU HÌNH NỘI DUNG (SỬA Ở ĐÂY) --- */
+        /* --- CẤU HÌNH NỘI DUNG (ĐÃ CHỈNH SỬA THEO TIMELINE) --- */
         const config = {
-            // Lời chúc chạy chữ (dùng \n để xuống dòng)
-            message: "Giáng sinh năm nay tớ muốn điều gì đó đặc biệt hơn mọi năm... \nĐó là được đi dạo phố và đón Noel cùng cậu. \nCậu đồng ý chứ????? ",
-            music: false // Đặt true nếu muốn thử bật nhạc (lưu ý trình duyệt có thể chặn)
+            // Lời nhắn mang tính chất "kể lại" và "thú tội"
+            message: "Hộp KitKat tớ vừa đưa cậu ấy... Tớ chọn nó vì thấy vị này hợp với nickname 'Chocomint' của cậu cực. 🍫\n\nCơ mà thứ lỗi cho tớ nhé: Chữ tớ viết trên thiệp hơi xấu, còn cái nơ hộp quà nhìn hơi... kỳ cục (thú thật là tớ không biết buộc dây đâu, loay hoay mãi đấy huhu =))).\n\nHy vọng cậu vẫn thích tấm lòng của tớ!",
+            music: false 
         };
 
         /* --- LOGIC HIỆU ỨNG GÕ CHỮ --- */
@@ -273,49 +153,36 @@
         
         function typeWriter() {
             if (index < config.message.length) {
-                // Xử lý xuống dòng
                 if (config.message.charAt(index) === '\n') {
                     textElement.innerHTML += '<br>';
                 } else {
                     textElement.innerHTML += config.message.charAt(index);
                 }
                 index++;
-                setTimeout(typeWriter, 50); // Tốc độ gõ (càng nhỏ càng nhanh)
+                setTimeout(typeWriter, 45); // Tốc độ gõ
             }
         }
-        // Chạy sau 1 giây
         setTimeout(typeWriter, 1000);
 
-        /* --- LOGIC NÚT "KHÔNG" BỎ CHẠY (NÂNG CẤP) --- */
+        /* --- LOGIC NÚT "KHÔNG" --- */
         const btnNo = document.getElementById('btnNo');
         const btnYes = document.getElementById('btnYes');
         
-        // Hàm tính toán vị trí ngẫu nhiên an toàn
         function moveButton() {
-            // Lấy kích thước màn hình
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
-            
-            // Kích thước nút
             const btnWidth = btnNo.offsetWidth;
             const btnHeight = btnNo.offsetHeight;
-
-            // Tính vị trí ngẫu nhiên (trừ đi kích thước nút để không bị tràn ra ngoài)
             const randomX = Math.random() * (windowWidth - btnWidth - 40) + 20; 
             const randomY = Math.random() * (windowHeight - btnHeight - 40) + 20;
-
-            // Chuyển sang fixed để chạy khắp màn hình
             btnNo.style.position = 'fixed';
             btnNo.style.left = randomX + 'px';
             btnNo.style.top = randomY + 'px';
         }
 
-        // Bắt sự kiện trên máy tính (hover)
         btnNo.addEventListener('mouseenter', moveButton);
-
-        // Bắt sự kiện trên điện thoại (chạm vào là chạy)
         btnNo.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Ngăn chặn click thật
+            e.preventDefault(); 
             moveButton();
         });
 
@@ -323,43 +190,28 @@
         const modal = document.getElementById('successModal');
         
         btnYes.addEventListener('click', () => {
-            // 1. Bắn pháo hoa
             const duration = 3000;
             const end = Date.now() + duration;
 
             (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#ff0000', '#00ff00', '#ffff00']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#ff0000', '#00ff00', '#ffff00']
-                });
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff0000', '#00ff00', '#ffff00'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff0000', '#00ff00', '#ffff00'] });
 
                 if (Date.now() < end) {
                     requestAnimationFrame(frame);
                 }
             }());
 
-            // 2. Hiện Modal
             setTimeout(() => {
                 modal.classList.add('active');
             }, 500);
         });
 
-        // Đóng modal khi click ra ngoài
         modal.addEventListener('click', (e) => {
             if(e.target === modal) modal.classList.remove('active');
         });
 
-        /* --- HIỆU ỨNG TUYẾT RƠI (CANVAS) --- */
+        /* --- HIỆU ỨNG TUYẾT RƠI --- */
         const canvas = document.getElementById("snowCanvas");
         const ctx = canvas.getContext("2d");
         
@@ -369,19 +221,17 @@
         canvas.height = height;
 
         const particles = [];
-        const particleCount = 100; // Số lượng tuyết
+        const particleCount = 100;
 
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * -height;
-                this.vy = 1 + Math.random() * 2; // Tốc độ rơi
-                this.vx = 0.5 - Math.random(); // Gió thổi nhẹ
-                this.r = 1 + Math.random() * 2; // Kích thước
-                this.o = 0.5 + Math.random() * 0.5; // Độ mờ
+                this.vy = 1 + Math.random() * 2;
+                this.vx = 0.5 - Math.random();
+                this.r = 1 + Math.random() * 2;
+                this.o = 0.5 + Math.random() * 0.5;
             }
             update() {
                 this.y += this.vy;
@@ -396,22 +246,15 @@
             }
         }
 
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < particleCount; i++) { particles.push(new Particle()); }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
-        
         animate();
 
-        // Resize canvas khi đổi kích thước màn hình
         window.addEventListener('resize', () => {
             width = window.innerWidth;
             height = window.innerHeight;
@@ -421,4 +264,3 @@
     </script>
 </body>
 </html>
-
