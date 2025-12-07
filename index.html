@@ -10,67 +10,111 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* --- GIỮ NGUYÊN CSS --- */
+        /* --- RESET & BASE STYLES --- */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
             font-family: 'Quicksand', sans-serif;
             min-height: 100vh;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
             color: #fff;
-            overflow: hidden;
+            /* QUAN TRỌNG: Cho phép cuộn dọc trên điện thoại */
+            overflow-y: auto; 
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
-            align-items: center;
-            position: relative;
+            align-items: flex-start; /* Căn từ trên xuống để không bị mất đầu trang */
+            padding-top: 40px; /* Cách lề trên một chút */
+            padding-bottom: 40px; /* Cách lề dưới để không bị sát đáy */
         }
+
         #snowCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .container { position: relative; z-index: 10; width: 90%; max-width: 500px; padding: 20px; text-align: center; }
+
+        .container { 
+            position: relative; 
+            z-index: 10; 
+            width: 90%; 
+            max-width: 500px; 
+            text-align: center; 
+            margin: 0 auto;
+        }
+
         .glass-box {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 40px 30px;
+            border-radius: 20px;
+            padding: 30px 20px; /* Giảm padding cho gọn */
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             animation: fadeIn 1.5s ease-out;
         }
+
+        /* --- TỐI ƯU HIỂN THỊ --- */
         .header-icon {
-            font-size: 60px;
+            font-size: 50px; /* Nhỏ hơn chút */
             color: #fcd34d;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             filter: drop-shadow(0 0 15px rgba(252, 211, 77, 0.5));
             animation: float 3s ease-in-out infinite;
         }
+
         h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem; /* Giảm size chữ tiêu đề */
+            margin-bottom: 15px;
             background: linear-gradient(to right, #fcd34d, #fbcfe8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.2;
         }
-        .message-box { min-height: 140px; margin-bottom: 30px; text-align: left; } /* Tăng chiều cao để chứa đủ tâm thư */
-        .typewriter-text { font-size: 1.05rem; line-height: 1.6; color: #e2e8f0; }
+
+        .message-box { 
+            min-height: 120px; /* Chiều cao tối thiểu */
+            margin-bottom: 20px; 
+            text-align: left; 
+            background: rgba(0,0,0,0.2); /* Thêm nền nhẹ cho dễ đọc */
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .typewriter-text { font-size: 0.95rem; line-height: 1.5; color: #e2e8f0; }
         .cursor { display: inline-block; width: 2px; background-color: #fcd34d; animation: blink 1s infinite; }
-        .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; color: #fff; }
-        .btn-group { display: flex; justify-content: center; gap: 20px; position: relative; height: 60px; }
+
+        .question { 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            margin-bottom: 25px; 
+            color: #fff;
+            padding: 0 10px;
+        }
+
+        .btn-group { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            position: relative; 
+            height: 55px; 
+            width: 100%;
+        }
+
         button {
-            padding: 12px 30px;
+            padding: 12px 20px;
             font-family: 'Quicksand', sans-serif;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             border-radius: 50px;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
             outline: none;
             border: none;
+            white-space: nowrap; /* Giữ chữ trên 1 dòng */
         }
+
         .btn-yes {
             background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 100%);
             color: #0f172a;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
             z-index: 20;
         }
         .btn-yes:active { transform: scale(0.95); }
@@ -80,20 +124,30 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease; 
         }
+
+        /* --- MODAL --- */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 100;
+            background: rgba(0,0,0,0.85); z-index: 100;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
         }
         .modal.active { opacity: 1; pointer-events: auto; }
         .modal-content {
-            background: #fff; color: #333; padding: 40px; border-radius: 20px;
-            text-align: center; max-width: 85%;
+            background: #fff; color: #333; padding: 30px; border-radius: 20px;
+            text-align: center; max-width: 90%; width: 350px;
             transform: scale(0.5); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .modal.active .modal-content { transform: scale(1); }
-        .modal-icon { font-size: 50px; color: #ef4444; margin-bottom: 15px; animation: heartBeat 1.2s infinite; }
+        .modal-icon { font-size: 45px; color: #ef4444; margin-bottom: 10px; animation: heartBeat 1.2s infinite; }
+
+        /* --- MEDIA QUERY CHO ĐIỆN THOẠI NHỎ --- */
+        @media (max-width: 380px) {
+            h1 { font-size: 2rem; }
+            .header-icon { font-size: 40px; }
+            .typewriter-text { font-size: 0.9rem; }
+            button { padding: 10px 15px; font-size: 0.85rem; }
+        }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -108,7 +162,8 @@
     <div class="container">
         <div class="glass-box">
             <div class="header-icon">
-                <i class="fas fa-gifts"></i> </div>
+                <i class="fas fa-gifts"></i>
+            </div>
             
             <h1>Về món quà lúc nãy...</h1>
 
@@ -123,7 +178,7 @@
 
             <div class="btn-group">
                 <button class="btn-yes" id="btnYes">Oki đi luôn! ❤️</button>
-                <button class="btn-no" id="btnNo">Thôi ngại lắm...</button>
+                <button class="btn-no" id="btnNo">Ngại lắm...</button>
             </div>
         </div>
     </div>
@@ -132,7 +187,7 @@
         <div class="modal-content">
             <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
             <h2 style="font-family: 'Dancing Script'; font-size: 2rem; margin-bottom: 10px;">Chốt đơn!</h2>
-            <p style="font-size: 1.1rem; line-height: 1.5;">
+            <p style="font-size: 1rem; line-height: 1.5;">
                 Cảm ơn cậu vì đã không chê hộp quà xấu xí của tớ haha.<br>
                 Giờ thì đi thôi nào! Merry Christmas! ❄️❤️
             </p>
@@ -140,14 +195,13 @@
     </div>
 
     <script>
-        /* --- CẤU HÌNH NỘI DUNG (ĐÃ CHỈNH SỬA THEO TIMELINE) --- */
+        /* --- NỘI DUNG --- */
         const config = {
-            // Lời nhắn mang tính chất "kể lại" và "thú tội"
             message: "Hộp KitKat tớ vừa đưa cậu ấy... Tớ chọn nó vì thấy vị này hợp với nickname 'Chocomint' của cậu cực. 🍫\n\nCơ mà thứ lỗi cho tớ nhé: Chữ tớ viết trên thiệp hơi xấu, còn cái nơ hộp quà nhìn hơi... kỳ cục (thú thật là tớ không biết buộc dây đâu, loay hoay mãi đấy huhu =))).\n\nHy vọng cậu vẫn thích tấm lòng của tớ!",
             music: false 
         };
 
-        /* --- LOGIC HIỆU ỨNG GÕ CHỮ --- */
+        /* --- TYPEWRITER --- */
         const textElement = document.getElementById('text');
         let index = 0;
         
@@ -159,25 +213,31 @@
                     textElement.innerHTML += config.message.charAt(index);
                 }
                 index++;
-                setTimeout(typeWriter, 45); // Tốc độ gõ
+                setTimeout(typeWriter, 40); 
             }
         }
-        setTimeout(typeWriter, 1000);
+        setTimeout(typeWriter, 800);
 
-        /* --- LOGIC NÚT "KHÔNG" --- */
+        /* --- BUTTON NO --- */
         const btnNo = document.getElementById('btnNo');
-        const btnYes = document.getElementById('btnYes');
         
         function moveButton() {
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
-            const btnWidth = btnNo.offsetWidth;
-            const btnHeight = btnNo.offsetHeight;
-            const randomX = Math.random() * (windowWidth - btnWidth - 40) + 20; 
-            const randomY = Math.random() * (windowHeight - btnHeight - 40) + 20;
+            // Lấy kích thước viewport
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            
+            // Lấy kích thước nút
+            const btnW = btnNo.offsetWidth;
+            const btnH = btnNo.offsetHeight;
+
+            // Tính toán vùng an toàn (tránh để nút bị che mất)
+            const randomX = Math.random() * (w - btnW - 20) + 10; 
+            const randomY = Math.random() * (h - btnH - 20) + 10;
+            
             btnNo.style.position = 'fixed';
             btnNo.style.left = randomX + 'px';
             btnNo.style.top = randomY + 'px';
+            btnNo.style.zIndex = '1000'; // Đảm bảo nút nổi lên trên
         }
 
         btnNo.addEventListener('mouseenter', moveButton);
@@ -186,7 +246,8 @@
             moveButton();
         });
 
-        /* --- LOGIC NÚT "CÓ" --- */
+        /* --- BUTTON YES --- */
+        const btnYes = document.getElementById('btnYes');
         const modal = document.getElementById('successModal');
         
         btnYes.addEventListener('click', () => {
@@ -211,7 +272,7 @@
             if(e.target === modal) modal.classList.remove('active');
         });
 
-        /* --- HIỆU ỨNG TUYẾT RƠI --- */
+        /* --- SNOW --- */
         const canvas = document.getElementById("snowCanvas");
         const ctx = canvas.getContext("2d");
         
@@ -221,7 +282,7 @@
         canvas.height = height;
 
         const particles = [];
-        const particleCount = 100;
+        const particleCount = 70; // Giảm bớt số lượng tuyết trên mobile cho đỡ lag
 
         class Particle {
             constructor() { this.reset(); }
